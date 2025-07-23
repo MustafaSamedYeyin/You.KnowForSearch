@@ -1,0 +1,24 @@
+<div class="w-full py-3 px-4 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md">
+  <div class="flex items-center space-x-3">
+    <div class="relative">
+      <select 
+        class="px-4 py-2 mr-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 cursor-pointer hover:border-blue-400"
+        [ngModel]="focus"
+        (ngModelChange)="dropDownChange($event)"
+        >
+        <option value="" disabled>Select a Topic</option>
+        <div *ngFor="let option of focus" >
+          <option [ngValue]="option" class="py-2"><span>{{ option.name }}</span></option>
+        </div>
+      </select>
+    </div>
+  </div>
+  
+  <div class="flex items-center">
+    <div id="g_id_onload" data-client_id="30685658695-tj9r8oer5vi29qk5qag71ag40foncra4.apps.googleusercontent.com"
+      data-context="signin" data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+  </div>
+</div>
+<router-outlet></router-outlet>

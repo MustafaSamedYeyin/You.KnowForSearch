@@ -1,0 +1,3 @@
+<app-login (isLogin)="Logged($event)" *ngIf="!GetLogIn()"></app-login>
+
+<app-nav-bar *ngIf="GetLogIn()"></app-nav-bar>

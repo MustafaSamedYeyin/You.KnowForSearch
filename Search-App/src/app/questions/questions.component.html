@@ -1,0 +1,95 @@
+<div class="max-w-[100%] mx-auto md:mx-auto main-flex-container relative flex flex-col md:flex-row gap-6 p-4 bg-gray-50 min-h-screen overflow-x-hidden"
+     (touchstart)="touchStart($event)" (touchmove)="touchMove($event)" (touchend)="touchEnd($event)">
+
+  <!-- Subtle slide indicator for mobile -->
+  <div class="md:hidden fixed top-1/2 left-0 transform -translate-y-1/2 bg-blue-500 h-16 w-1.5 rounded-r opacity-70 z-10">
+  </div>
+
+
+  <div *ngIf="sidebarOpen" (click)="toggleSidebar()"
+       class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"></div>
+
+  <!--<div [ngClass]="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
+    class="sidebar fixed md:static top-0 left-0 h-full md:h-auto w-3/4 sm:w-2/3 md:w-1/4 lg:w-1/4 bg-white md:bg-transparent z-40 transform transition-transform duration-300 ease-in-out md:translate-x-0">
+    <div class="h-full md:h-auto overflow-y-auto bg-white rounded-lg shadow-md p-4">
+      <div class="flex justify-between items-center mb-4 md:hidden">
+        <h2 class="text-lg font-bold">Menu</h2>
+        <button (click)="toggleSidebar()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <app-deck (deck)="selectDeck($event)" class="mb-4 block"></app-deck>
+      <app-deck-items (topic)="setTopic($event)" [selectedDeck]="deck" class="block"></app-deck-items>
+    </div>
+  </div>-->
+
+  <div class="main-content w-full md:w-3/4 lg:w-3/4 space-y-4 md:ml-0 max-w-full overflow-x-hidden">
+    <div class="question-card bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div class="question-card bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <a (click)="openInChatGpt(topic)" class="text-white-500 text-sm ml-2" title="ChatGPT">GPT</a>
+        <a (click)="openInGemini(topic)" class="text-white-500 text-sm ml-2" title="Google Gemini">GEM</a>
+        <a (click)="openInDeepSeek(topic)" class="text-white-500 text-sm ml-2" title="DeepSeek">DSK</a>
+        <a (click)="openInClaude(topic)" class="text-white-500 text-sm ml-2" title="Anthropic Claude">CLD</a>
+        <a (click)="openInPerplexity(topic)" class="text-white-500 text-sm ml-2" title="Perplexity AI">PLX</a>
+        <a (click)="openInBard(topic)" class="text-white-500 text-sm ml-2" title="Google Bard">BRD</a>
+        <a (click)="openInBing(topic)" class="text-white-500 text-sm ml-2" title="Microsoft Bing">BNG</a>
+      </div>
+    </div>
+    <div class="question-card bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+      <label class="label block text-sm font-medium text-gray-700 mb-1">Topic:</label>
+      <input name="Topic" type="text" [(ngModel)]="topic"
+             class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+    </div>
+    <div class="question-card bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+      <label class="label block text-sm font-medium text-gray-700 mb-1">Diff Topic:</label>
+      <input name="DiffTopic" type="text" [(ngModel)]="diffTopic"
+             class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+    </div>
+    <div class="question-card bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+      <label class="label block text-sm font-medium text-gray-700 mb-1">Problem:</label>
+      <input type="text" [(ngModel)]="problemValue"
+             class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+    </div>
+    <div class="card bg-white p-4 rounded-lg shadow-md">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <tbody>
+            <tr class="splitHalf hover:bg-blue-50 transition-colors duration-200" *ngFor="let question of questions">
+              <td class="question p-3 border-b border-gray-200 cursor-pointer"
+                  (click)="Search(question.questionFormat)">
+                {{question.questionFormat | question : topic : problemValue : diffTopic }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="fixed inset-0 z-50 bg-black bg-opacity-40 transition-opacity duration-300 md:hidden"
+       *ngIf="resourcePanelOpen" (click)="resourcePanelOpen = false">
+  </div>
+  <div class="fixed top-0 right-0 h-full w-4/5 max-w-xs bg-white shadow-lg z-50 transform transition-transform duration-300 md:hidden"
+       [ngClass]="{'translate-x-0': resourcePanelOpen, 'translate-x-full': !resourcePanelOpen}">
+    <div class="flex justify-end p-2">
+      <button (click)="resourcePanelOpen = false" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    </div>
+    <div class="w-screen h-screen fixed top-0 left-0 bg-white z-50 overflow-auto">
+      <app-resource></app-resource>
+    </div>
+  </div>
+
+  <!-- Floating Button for Mobile -->
+  <button class="fixed bottom-6 right-6 z-50 bg-blue-600 text-white rounded-full p-4 shadow-lg md:hidden"
+          (click)="resourcePanelOpen = true" aria-label="Open Resources">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+  </button>
+
+  <!-- Desktop Resource Panel -->
+  <div class="hidden md:block">
+    <app-resource></app-resource>
+  </div>
+</div>

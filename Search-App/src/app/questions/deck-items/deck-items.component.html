@@ -1,0 +1,10 @@
+<div>
+  <div
+    class="deck-item"
+    (click)="setTopic(item.text)"
+    *ngFor="let item of deckItems"
+  >
+    {{ item.text }}
+    
+  </div>
+</div>

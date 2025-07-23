@@ -1,0 +1,8 @@
+<select class="deck-selector" [(ngModel)]="selectedDeck" (change)="selectDeck(selectedDeck)">
+    <option disabled selected value="">
+        Choose a deck...
+    </option>
+    <option *ngFor="let deck of decks" [ngValue]="deck">
+        {{ deck.text }}
+    </option>
+</select>
